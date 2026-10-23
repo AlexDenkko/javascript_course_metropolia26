@@ -1,0 +1,42 @@
+/* Use external style sheet.
+Don’t use default font.
+Add hover effect to the link. Also don’t use default color in the link and remove underline.
+Add border and rounded corners to the image.
+Every second row in the table should have a different background color.
+The list should not have default bullet points. */
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: red;
+}
+
+a:hover {
+  color: rgb(9, 255, 0);
+  background-color: rgb(0, 0, 0);
+}
+
+img {
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+table tr:nth-child(even) {
+  background-color: rgb(0, 255, 255);
+}
+
+table tr:nth-child(odd) {
+  background-color: rgb(255, 0, 255);
+}
+
+ul {
+  list-style-type: none;
+}
+
+img {
+  width: 300px;
+  height: auto;
+}
