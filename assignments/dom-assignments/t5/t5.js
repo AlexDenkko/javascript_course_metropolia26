@@ -771,3 +771,30 @@ const restaurants = [
 ];
 
 // your code here
+// Luodaan kartta ja asetetaan alkuperäinen näkymä Helsinkiin
+const map = L.map('map').setView([60.1699, 24.9384], 11);
+
+// Lisätään kartalle taustakartta
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+}).addTo(map);
+
+// Käydään kaikki ravintolat läpi
+restaurants.forEach(restaurant => {
+  // Haetaan ravintolan koordinaatit
+  const longitude = restaurant.location.coordinates[0];
+  const latitude = restaurant.location.coordinates[1];
+
+  // Leaflet odottaa koordinaatit järjestyksessä [leveysaste, pituusaste]
+  const marker = L.marker([latitude, longitude]).addTo(map);
+
+  // Muodostetaan popupin sisältö
+  const popupContent = `
+    <h3>${restaurant.name}</h3>
+    <p>${restaurant.address}, ${restaurant.postalCode} ${restaurant.city}</p>
+  `;
+
+  // Näytetään tiedot, kun merkkiä napsautetaan
+  marker.bindPopup(popupContent);
+});

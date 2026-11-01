@@ -771,3 +771,65 @@ const restaurants = [
 ];
 
 // your code here
+const table = document.querySelector('table');
+
+function showRestaurants(userLongitude, userLatitude) {
+  // Kopioidaan taulukko, jotta alkuperäistä ei muuteta
+  const sortedRestaurants = [...restaurants];
+
+  // Lasketaan etäisyys jokaiselle ravintolalle
+  sortedRestaurants.forEach(restaurant => {
+    const longitude = restaurant.location.coordinates[0];
+    const latitude = restaurant.location.coordinates[1];
+
+    const longitudeDifference = longitude - userLongitude;
+    const latitudeDifference = latitude - userLatitude;
+
+    restaurant.distance = Math.sqrt(
+      longitudeDifference ** 2 + latitudeDifference ** 2
+    );
+  });
+
+  // Järjestetään lähimmästä kauimmaiseen
+  sortedRestaurants.sort((a, b) => a.distance - b.distance);
+
+  // Lisätään ravintolat HTML-taulukkoon
+  sortedRestaurants.forEach(restaurant => {
+    const row = document.createElement('tr');
+
+    const nameCell = document.createElement('td');
+    nameCell.textContent = restaurant.name;
+
+    const addressCell = document.createElement('td');
+    addressCell.textContent = `${restaurant.address}, ${restaurant.postalCode} ${restaurant.city}`;
+
+    row.appendChild(nameCell);
+    row.appendChild(addressCell);
+
+    table.appendChild(row);
+  });
+}
+
+// Selvitetään käyttäjän nykyinen sijainti
+if ('geolocation' in navigator) {
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      const userLongitude = position.coords.longitude;
+      const userLatitude = position.coords.latitude;
+
+      showRestaurants(userLongitude, userLatitude);
+    },
+    () => {
+      const message = document.createElement('p');
+      message.textContent =
+        'Sijaintia ei voitu hakea. Salli sijainnin käyttö ja yritä uudelleen.';
+
+      document.body.appendChild(message);
+    }
+  );
+} else {
+  const message = document.createElement('p');
+  message.textContent = 'Selaimesi ei tue sijainnin hakemista.';
+
+  document.body.appendChild(message);
+}
